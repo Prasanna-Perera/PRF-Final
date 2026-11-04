@@ -282,6 +282,284 @@ import java.util.*;
 
 		}
 
+public static void addStudent(){
+			Scanner input = new Scanner(System.in);
+			char newbatch = 'N';
+			char newstudent = 'N';
+			
+			do{
+				System.out.println("-----------------------------------------------------------------");
+				System.out.println("|\t\t\tAdd Student\t\t\t\t|");
+				System.out.println("-----------------------------------------------------------------\n");			
+				
+				
+				System.out.print("Enter Batch Number (Student should be added)	 : ");
+				int batch = input.nextInt();
+				input.nextLine();
+				
+				if(checkBatchStatus(batch)==true){
+					
+					System.out.print("\nEnter Student NIC	:");
+					String nic = input.nextLine();
+					System.out.println("");	
+					
+						if(isNicDuplicates(nic)==true){
+							System.out.println("\tThis student is already added to the system.");
+						
+						}else{
+											
+							System.out.print("Enter Student Name	:");
+							String name = input.nextLine();
+							System.out.println("");	
+							
+							System.out.print("Enter Lecturer Mode (1-PHYSICAL 0-ONLINE)	:");
+							int mode = input.nextInt();	
+							input.nextLine();
+							
+							String inNo = generateRegNo(batch, mode);
+							saveStudent(inNo, nic, name);
+										
+							System.out.println("\n\tStudent Registration No	-"+inNo);
+							System.out.println("\nStudent was successfully added to the system");
+						}			
+					
+						System.out.print("\nDo you want to add another Student (Y/N): ");
+						newstudent = input.next().charAt(0);
+						input.nextLine();
+					
+						if(newstudent == 'Y' || newstudent == 'y'){
+							clearConsole();
+							continue;
+						}else{
+							clearConsole();
+							studentManagement();
+							return;
+						}
+					
+				}else{	
+				
+						System.out.println("\n\tStudent cannot be added to this batch because enrollment is closed. ");
+						System.out.print("\nDo you want to add student to another Batch (Y/N): ");
+						newbatch = input.next().charAt(0);
+						input.nextLine();
+									
+						if(newbatch == 'Y'|| newbatch == 'y'){
+							clearConsole();
+							continue;
+						}else{
+							clearConsole();
+							homePage();
+							return;
+						}
+				}
+				
+				
+			}while(true);
+				
+		}
+
+public static void updateStudent(){
+			Scanner input = new Scanner(System.in);
+			char updateAnotherDetail = 'N';
+			
+			do{
+				System.out.println("-----------------------------------------------------------------");
+				System.out.println("|\t\t\tUpdate Student\t\t\t\t|");
+				System.out.println("-----------------------------------------------------------------\n");
+				
+					
+				System.out.print("Enter Student Registation No	:");	
+				String regNo = input.nextLine(); 
+				System.out.println("");
+				
+				if(isDuplicate(regNoArray,regNo) == true){
+					
+					int index = findIndexOfStringArrary(regNoArray,regNo);
+					
+					System.out.println("\tStudent Name	:"+ nameArray[index] );
+					System.out.println("\tStudent NIC	:" + nicArray[index] );
+					System.out.println("\n");
+					
+					System.out.println("What do you want to update?");
+					System.out.println("\t(01) Student Name");
+					System.out.println("\t(02) Student NIC\n");
+					
+					System.out.print("Enter Your Option 	- ");
+					int option = input.nextInt();
+					input.nextLine();
+										
+					clearConsole();
+					
+					switch (option){
+						case 1:
+							System.out.println("Student Name Update");
+							System.out.println("====================\n");
+							
+							System.out.println("Registeration No	:" + regNo);
+							System.out.println("Student NIC		:" + nicArray[index]);
+							System.out.println("Student Current Name	:" + nameArray[index]);
+							System.out.println("");
+											
+							System.out.print("Enter Student Name To Update	- ");
+							String newName = input.nextLine();
+							nameArray[index] = newName;
+							
+							System.out.print("\n\tStudent Name Update Successfully...");
+							break;
+							
+						case 2:
+						
+							System.out.println("Student NIC Update");
+							System.out.println("====================\n");
+								
+							System.out.println("Registeration No	:" + regNo);
+							System.out.println("Student Name		:" + nameArray[index]);
+							System.out.println("Student Current NIC	:" + nicArray[index]);
+								
+														
+							System.out.print("\nEnter Student NIC to Update	- ");
+							String newNIC =input.nextLine();
+							nicArray[index] = newNIC;
+								
+							System.out.print("\n\tStudent NIC Update Successfully...\n");
+							break;
+							
+						default:
+							System.out.println("\t Invalid ");
+						}
+						
+						System.out.println("");		
+						System.out.print("\nDo you want to update another student Details (Y/N) : ");
+						updateAnotherDetail = input.next().charAt(0);
+						input.nextLine();
+						clearConsole();
+						
+						
+					
+					
+				}else{
+					System.out.print("\tTry Again...");
+				}
+	 
+			} while (updateAnotherDetail == 'Y' || updateAnotherDetail == 'y');
+		}
+
+public static void viewStudent(){
+			Scanner input = new Scanner(System.in);
+				
+				do{
+				System.out.println("-----------------------------------------------------------------");
+				System.out.println("|\t\t\tView Student's Profile\t\t\t|");
+				System.out.println("-----------------------------------------------------------------\n");			
+				
+				
+				System.out.print("Enter Student Registration No	 :");
+				String registrationNo = input.nextLine();
+				
+				int index = isRegistrationNoExists(registrationNo);
+				
+				if(index >= 0){
+					printStudentDetails(index);
+					
+					System.out.print("\nDo you want to search another student details(Y/N): ");
+					char retryOption = input.next().charAt(0);	
+					input.nextLine();
+					
+					if(retryOption == 'Y'){
+						clearConsole();
+						continue;
+					}else{
+						clearConsole();
+						studentManagement();
+					}
+				
+				}else{
+					System.out.println();
+					System.out.println("\t This student does not exists in the system...");
+					
+					System.out.println();
+					System.out.print("Do you want to search another student details (Y/N): ");
+					char retryOption = input.next().charAt(0);
+					input.nextLine();
+					
+					if(retryOption == 'Y' || retryOption == 'y'){
+						clearConsole();
+						continue;
+					}else{
+						clearConsole();
+						studentManagement();
+						
+					}
+				}
+			}while(true);
+        
+        
+		}        
+
+public static void deleteStudent(){
+			Scanner input = new Scanner(System.in);
+						
+				do{
+					System.out.println("-----------------------------------------------------------------");
+					System.out.println("|\t\t\tDelete Student's Profile\t\t|");
+					System.out.println("-----------------------------------------------------------------\n");			
+					
+					
+					System.out.print("Enter Student Registration No	 :");
+					String regNo = input.nextLine();
+					
+					int index = isRegistrationNoExists(regNo);
+				
+						if(index >= 0){
+							printStudentDetails(index);
+							
+							System.out.print("\nDo you want to delete this student profile (Y/N): ");
+							char checkDelete = input.next().charAt(0);	
+							input.nextLine();
+						
+							if(checkDelete == 'Y' || checkDelete == 'y'){
+								for(int i = index; i < regNoArray.length - 1; i++){
+									
+									regNoArray	[i]	= regNoArray [i + 1];
+									nameArray	[i]	= nameArray	 [i + 1];
+									nicArray	[i]	= nicArray	 [i + 1];
+									prfArray	[i]	= prfArray	 [i + 1];
+									dbmsArray	[i]	= dbmsArray	 [i + 1];
+								}
+							int last = regNoArray.length - 1;
+							
+								regNoArray[last] = null;
+								nameArray[last]  = null;
+								nicArray[last]   = null;
+								prfArray[last]   = -1;
+								dbmsArray[last]  = -1;	
+								
+								System.out.println("\n\tStudent was successfully deleted from the system.\n");
+							}else{
+								System.out.println("\n\t Try Again...");
+							}
+						
+										
+						}else{	
+							System.out.println();
+							System.out.println("\tThis student does not exist in the system.\n");
+						}
+					
+						System.out.print("Do you want to delete another student profile(Y/N): ");
+						char retryOption = input.next().charAt(0);
+						input.nextLine();
+							
+						if(retryOption == 'Y'|| retryOption == 'y'){
+							clearConsole();
+							continue;
+						}else{
+							return;
+						}
+					
+				}while(true);
+			
+		}		
+        
 // main method
 		public static void main(String args[]){
 			homePage();		
