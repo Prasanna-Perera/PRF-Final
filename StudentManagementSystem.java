@@ -198,7 +198,7 @@ import java.util.*;
 		/////////////////////////////////////////////// Methods ////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        
+
 
     		public static void homePage() {
 			System.out.println("-----------------------------------------------------------------");
@@ -238,6 +238,48 @@ import java.util.*;
 						break;
 				}
 			} while (true);
+		}
+        
+        public static void studentManagement() {
+			System.out.println("-----------------------------------------------------------------");
+			System.out.println("|\t\t\tStudent Management\t\t\t|");
+			System.out.println("-----------------------------------------------------------------\n");
+			System.out.println("[1] Add Student");
+			System.out.println("\n[2] Update Student ");
+			System.out.println("\n[3] View Student Profile");
+			System.out.println("\n[4] Delete Student Profile");
+			System.out.println("\n[5] Exit");
+			
+			Scanner input = new Scanner(System.in);
+			
+			do{
+				System.out.print("\n\nEnter an option to continue > ");
+				int option = input.nextInt();
+			
+				switch (option) {
+					case 1:
+						clearConsole();
+						addStudent();
+						break;
+					case 2:
+						clearConsole();
+						updateStudent();
+						break;
+					case 3:
+						clearConsole();
+						viewStudent();
+						break;
+					case 4:
+						clearConsole();
+						deleteStudent();
+						break;
+					case 5:
+						exit();
+						break;
+				}
+			} while (true);
+			
+
 		}
 
 // main method
