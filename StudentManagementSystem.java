@@ -194,6 +194,52 @@ import java.util.*;
 				-2, -2, -2, -2, -2
 		};
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////// Methods ////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        
+
+    		public static void homePage() {
+			System.out.println("-----------------------------------------------------------------");
+			System.out.println("|\t\t\tiCET Student Management System\t\t|");
+			System.out.println("-----------------------------------------------------------------\n");
+			System.out.println("[1] Student Management");
+			System.out.println("\n[2] Batch Management ");
+			System.out.println("\n[3] Grade Management");
+			System.out.println("\n[4] Report Generator");
+			System.out.println("\n[5] Exit");
+
+			Scanner input = new Scanner(System.in);
+			do {
+
+				System.out.print("\n\nEnter an option to continue > ");
+				int option = input.nextInt();
+
+				switch (option) {
+					case 1:
+						clearConsole();
+						studentManagement();
+						break;
+					case 2:
+						clearConsole();
+						batchManagement();
+						break;
+					case 3:
+						clearConsole();
+						gradeManagement();
+						break;
+					case 4:
+						clearConsole();
+						reportGenerator();
+						break;
+					case 5:
+						exit();
+						break;
+				}
+			} while (true);
+		}
+
 // main method
 		public static void main(String args[]){
 			homePage();		
