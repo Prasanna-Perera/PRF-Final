@@ -198,8 +198,308 @@ import java.util.*;
 		/////////////////////////////////////////////// Methods ////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
         
+        // console clear
+		public final static void clearConsole() {
+			try {
+				final String os = System.getProperty("os.name");
+				if (os.contains("Windows")) {
+					new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+				} else {
+					System.out.print("\033[H\033[2J");
+					System.out.flush();
+				}
+			} catch (final Exception e) {
+				e.printStackTrace();
+				// Handle any exceptions.
+			}
+		}
 
+		 // Exit
+		public static void exit() {
+			clearConsole();
+			System.out.println("\n\t\tYou left the program...\n");
+			System.exit(0);
+		}
+		
+		// BatchNameArray & BatchStatusArray + tempArray
+		public static void mainBatchArray(int batchNo){
+				
+				int[] tempbatchNameArray	= new int[batchNameArray.length + 1]; 
+				int[] tempbatchStatusArray	= new int[batchStatusArray.length + 1]; 
+				
+				for (int i = 0; i < batchStatusArray.length; i++){
+					tempbatchNameArray		[i]	= batchNameArray	[i];
+					tempbatchStatusArray	[i]	= batchStatusArray	[i];
+				}
+				
+				int last = batchNameArray.length; 
+				tempbatchNameArray[last]   = batchNo;
+				tempbatchStatusArray[last] = ENROLLMENTCLOSED;
+				
+			batchNameArray		= tempbatchNameArray;
+			batchStatusArray	= tempbatchStatusArray;
+		}
+		
+		// finding Integer duplication
+		public static boolean isIntDuplicates(int[] arr, int num) {
+			for (int i = 0; i < arr.length; i++) {
+				if (arr[i] == num) {
+					return true;
+				}
+			}
+			return false;
+		}
 
+		// Arrays & Temp arrays
+		public static void extendArrays(){
+			String[] tempregNoArray = new String[regNoArray.length+1];
+			String[] tempnicArray 	= new String[nicArray.length+1];
+			String[] tempnameArray	= new String[nameArray.length+1];
+			int[] tempprfArray 		= new int[prfArray.length+1];
+			int[] tempdbmsArray 	= new int[dbmsArray.length+1];
+			
+			for (int i = 0; i < regNoArray.length; i++){
+				tempregNoArray [i]	= regNoArray[i];
+				tempnicArray   [i]	= nicArray	[i];
+				tempnameArray  [i]	= nameArray [i];
+				tempprfArray   [i]	= prfArray	[i];
+				tempdbmsArray  [i]	= dbmsArray	[i];
+				
+			}
+			
+			regNoArray	= tempregNoArray; 
+			nicArray	= tempnicArray;
+			nameArray	= tempnameArray;	
+			prfArray	= tempprfArray;	
+			dbmsArray	= tempdbmsArray;				
+		
+		}
+		
+		//Check Batch Status 
+		public static boolean checkBatchStatus(int batch){
+			for(int i =0; i<batchNameArray.length; i++){
+				if(batchNameArray[i] == batch)
+					return (batchStatusArray[i] == ENROLLMENTOPEN);
+			}
+			System.out.println("\n\tBatch does not exist in the system.");
+			return false;
+		}
+		
+		//Create Id
+		public static String generateRegNo(int batch, int mode){
+		String modeMark = (mode == 1) ? "PR" : "OR";
+
+			int countInBatch = 0;
+			for(int i = 0; i < regNoArray.length; i++){
+				if(regNoArray[i] != null && regNoArray[i].length() == 10){
+					int regBatch = Integer.parseInt(regNoArray[i].substring(4,7));
+					if(regBatch == batch){
+						countInBatch++;
+					}
+				}
+			}
+			int seq = countInBatch + 1;
+			return modeMark + "24" + batch + String.format("%03d", seq);
+		}
+		
+		//Save with temp array
+		public static void saveStudent(String regNo, String nic, String name){
+			extendArrays();
+			int newIndex = regNoArray.length - 1;
+
+			regNoArray[newIndex] = regNo;
+			nicArray[newIndex]   = nic;
+			nameArray[newIndex]  = name;
+			prfArray[newIndex]   = -2;
+			dbmsArray[newIndex]  = -2;
+		}
+		
+		// Registration No
+		public static int isRegistrationNoExists(String registrationNO){
+			for (int i = 0; i < regNoArray.length; i++){
+				if(registrationNO.equals(regNoArray[i])){
+					return i;
+				}
+			}
+		return -1;
+			
+		}
+		
+		// Student Count
+		public static int countStudentsInBatch(int batch){
+			int count = 0;
+			for(int i = 0; i < regNoArray.length; i++){
+				if(regNoArray[i] != null && regNoArray[i].length() == 10){
+					int regBatch = Integer.parseInt(regNoArray[i].substring(4,7));
+					if(regBatch == batch){
+						count++;
+					}
+				}
+			}
+			return count;
+		}
+		
+		//Check Student Nic 
+		public static boolean isNicDuplicates(String nic){
+			for(int i =0; i<nicArray.length; i++){
+				if(nicArray[i].equals(nic)){
+				return true;
+				}
+			}
+			return false;
+		}
+		
+		// check regNumber
+		public static boolean isDuplicate(String[] regNoArray, String regNo){
+			for (int i = 0; i < regNoArray.length; i++){
+				if(regNo.equals (regNoArray[i])){
+					return true;
+					}
+				}
+			return false;
+		}
+		
+		// Find String index
+		public static int findIndexOfStringArrary(String [] ar, String value){
+			for (int i = 0; i < ar.length ; i++){
+				if(value.equals(ar[i])){
+					return i;
+				}
+				
+			}
+			return -1;
+		}
+		
+		// finding index of a integer value in an integer array
+		public static int findIndexOfIntArray(int[] arr, int a) {
+			for (int i = 0; i < arr.length; i++) {
+				if (arr[i] == a) {
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		// GPA Marks
+		public static double getGPAValues(int marks){
+			return	marks >= 90 ? 4.25 :
+					marks >= 80 ? 4.00 :
+					marks >= 75 ? 3.70 :
+					marks >= 70 ? 3.30 :
+					marks >= 65 ? 3.00 :
+					marks >= 60 ? 2.70 :
+					marks >= 55 ? 2.30 :
+					marks >= 50 ? 2.00 :
+					marks >= 45 ? 1.70 :
+					marks >= 40 ? 1.30 :
+					marks >= 30 ? 1.00 :
+								  0.70 ;
+		}
+		
+		// GPA Calculation
+		public static double calculateGPA(int index){
+			if (prfArray[index] < 0 && dbmsArray[index] < 0){
+				return 0.0;
+			}
+			
+			if (prfArray[index] >= 0 && dbmsArray[index] >= 0){
+				return ((double)(getGPAValues(prfArray[index]) + getGPAValues(dbmsArray[index]))/2);
+			}
+			
+			if (prfArray[index] < 0 && dbmsArray[index] >= 0){
+				return ((double)(getGPAValues(dbmsArray[index]))/2);
+			}
+			if (prfArray[index] >= 0 && dbmsArray[index] < 0){
+				return ((double)(getGPAValues(prfArray[index]))/2);
+			}
+				return 0.0;
+			
+		}
+		
+		// conducted & absent
+		public static void printStudentDetails(int index){
+			
+			System.out.println("\n\tRegistration No		:" + regNoArray[index]);
+			System.out.println("\tStudent Name		:" + nameArray[index]);
+			System.out.println("\tStudent NIC		:" + nicArray[index]);
+			
+			if(prfArray[index] == -2){
+					System.out.println("\tStudent PRF Marks	:Not Conducted");
+			}else if(prfArray[index] == -1){
+				System.out.println("\tStudent PRF Marks	:Absent");
+			}else{
+				System.out.println("\tStudent PRF Marks	:" + prfArray[index]);
+			}
+			
+			if(dbmsArray[index] == -2){
+					System.out.println("\tStudent DBMS Marks	:Not Conducted");
+			}else if(dbmsArray[index] == -1){
+				System.out.println("\tStudent DBMS Marks	:Absent");
+			}else{
+				System.out.println("\tStudent DBMS Marks	:" + dbmsArray[index]);
+			}
+			
+			System.out.println("\tStudent GPA		:" +calculateGPA(index));
+		} 
+		
+		// Print PRF Marks 
+		public static void prfMarks(int index){
+			
+			System.out.println("\n\tRegistration No		:" + regNoArray[index]);
+			System.out.println("\tStudent Name		:" + nameArray[index]);
+			System.out.println("\tStudent NIC		:" + nicArray[index]);
+			
+			if(prfArray[index] == -2){
+					System.out.println("\t\nThis Student has not Completed the PRF module.\n\tStatus	: Not Conducted");
+			}else if(prfArray[index] == -1){
+				System.out.println("\nThis Student has not Completed the PRF module.\n\tStatus	: Absent");
+			}else{
+				System.out.println("\nThis Student has already Completed the PRF module.\n\tPRF Marks	: " +prfArray[index]);
+			}
+			
+		}  
+		
+		// Print DBMS Marks 
+		public static void dbmsMarks(int index){
+			
+			System.out.println("\n\tRegistration No		:" + regNoArray[index]);
+			System.out.println("\tStudent Name		:" + nameArray[index]);
+			System.out.println("\tStudent NIC		:" + nicArray[index]);
+			
+			if(dbmsArray[index] == -2){
+					System.out.println("\t\nThis Student has not Completed the DBMS module.\n\tStatus	: Not Conducted");
+			}else if(dbmsArray[index] == -1){
+				System.out.println("\nThis Student has not Completed the DBMS module.\n\tStatus	: Absent");
+			}else{
+				System.out.println("\nThis Student has already Completed the DBMS module.\n\tDBMS Marks	: " +dbmsArray[index]);
+			}
+			
+		}  
+
+		// 105 => 110
+		public static void batch105(){
+			printBatchReport(105);
+		}
+
+		public static void batch106(){
+			printBatchReport(106);
+		}
+
+		public static void batch107(){
+			printBatchReport(107);
+		}
+
+		public static void batch108(){
+			printBatchReport(108);
+		}
+
+		public static void batch109(){
+			printBatchReport(109);
+		}
+
+		public static void batch110(){
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
     		public static void homePage() {
 			System.out.println("-----------------------------------------------------------------");
 			System.out.println("|\t\t\tiCET Student Management System\t\t|");
